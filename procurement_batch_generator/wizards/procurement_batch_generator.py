@@ -27,6 +27,12 @@ class ProcurementBatchGenerator(models.TransientModel):
         _logger.debug("ONCHANGE defaul qty")
         for line in self.line_ids:
             line.procurement_qty = self.default_quantity
+
+    
+    @api.onchange('group_id')
+    def onchange_default_group(self):        
+        for line in self.line_ids:                   
+            line.group_id = self.group_id
     
     @api.model
     def _default_lines(self):
@@ -70,6 +76,7 @@ class ProcurementBatchGenerator(models.TransientModel):
     comment = fields.Text(string="Comment")
     default_quantity = fields.Float(string="Default Quantity", default=1.0)
     route_ids = fields.Many2many('stock.location.route', string='Preferred Routes')
+    group_id = fields.Many2one('procurement.group')
     
     @api.multi
     def validate(self):
@@ -121,6 +128,7 @@ class ProcurementBatchGeneratorLine(models.TransientModel):
     warehouse_id = fields.Many2one(
         'stock.warehouse', string='Warehouse', required=True)
     date_planned = fields.Date(string='Planned Date', required=True)
+    group_id = fields.Many2one('procurement.group')
     
 
     @api.multi
@@ -139,6 +147,7 @@ class ProcurementBatchGeneratorLine(models.TransientModel):
             'company_id': self.warehouse_id.company_id.id,
             'date_planned': self.date_planned,
             'warehouse_id': self.warehouse_id.id,
+            'group_id': self.group_id.id or False,
             
             }
         if self.parent_id.route_ids:

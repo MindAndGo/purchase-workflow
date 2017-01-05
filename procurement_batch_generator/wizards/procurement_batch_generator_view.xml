@@ -21,6 +21,8 @@
                             <field name="default_quantity" nolabel="1" />
                             <label for="warehouse_id" ></label>
                             <field name="warehouse_id" nolabel="1" />
+                            <label for="group_id" ></label>
+                            <field name="group_id" nolabel="1" required="1"/>
                             <label for="route_ids" >Preferred routes</label>
                             <field name="route_ids" nolabel="1" 
                                    widget="many2many_tags" />
@@ -39,6 +41,7 @@
                                 <field name="incoming_qty"/>
                                 <field name="uom_id" groups="product.group_uom"/>
                                 <field name="procurement_qty"/>
+                                <field name="group_id" nolabel="1" invisible="1"/>
                                 <field name="warehouse_id" readonly="1"/>
                                 <field name="date_planned"/>
                             </tree>
@@ -60,7 +63,7 @@
                     res_model="procurement.batch.generator"
                     src_model="product.product"
                     view_mode="form"
-                    target="new" />
+                    target="current" />
 
     </data>
 </openerp>
